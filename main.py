@@ -1,4 +1,3 @@
-
 from dotenv import load_dotenv
 from pydantic_ai import Agent
 
@@ -35,5 +34,3 @@ agent = Agent(
 dice_result = agent.run_sync(  # type: ignore
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
 )
-print(dice_result.output)
-# > Congratulations Anne, you guessed correctly! You're a winner!
