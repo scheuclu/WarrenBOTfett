@@ -4,16 +4,19 @@ from warrenbotfett.models import Cash
 from warrenbotfett.utils.secrets import secrets
 
 
-def cash() -> Cash:
-    url = "https://demo.trading212.com/api/v0/equity/account/cash"
+def cash() -> Cash | Exception:
+    try:
+        url = "https://demo.trading212.com/api/v0/equity/account/cash"
 
-    headers = {"Authorization": secrets.trading212_api_key}
+        headers = {"Authorization": secrets.trading212_api_key}
 
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
 
-    data = response.json()
-    return Cash(**data)
+        data = response.json()
+        return Cash(**data)
+    except Exception as e:
+        return e
 
 
 if __name__ == "__main__":

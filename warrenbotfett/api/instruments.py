@@ -52,23 +52,27 @@ SUBSET_TICKER = ["5SPYl_EQ"]
 
 
 # @cached(ttl_seconds=3600)
-def list_instruments() -> list[TradeableInstrument]:
-    url = "https://demo.trading212.com/api/v0/equity/metadata/instruments"
+def list_instruments() -> list[TradeableInstrument] | Exception:
+    try:
+        url = "https://demo.trading212.com/api/v0/equity/metadata/instruments"
 
-    headers = {"Authorization": secrets.trading212_api_key}
+        headers = {"Authorization": secrets.trading212_api_key}
 
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
 
-    data = response.json()
-    return [
-        TradeableInstrument(**d)
-        for d in data
-        if (d["isin"] in SUBSET_ISIN or d["ticker"] in SUBSET_TICKER)
-    ]
+        data = response.json()
+        return [
+            TradeableInstrument(**d)
+            for d in data
+            if (d["isin"] in SUBSET_ISIN or d["ticker"] in SUBSET_TICKER)
+        ]
+    except Exception as e:
+        return e
 
 
 if __name__ == "__main__":
     instruments = list_instruments()
-    for item in instruments:
-        print(item)
+    if not isinstance(instruments, Exception):
+        for item in instruments:
+            print(item)
