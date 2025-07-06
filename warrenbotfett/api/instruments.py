@@ -2,6 +2,7 @@ import requests
 from diskcache import Cache
 from dotenv import load_dotenv
 
+from warrenbotfett.common import ToolError
 from warrenbotfett.models import TradeableInstrument
 from warrenbotfett.utils.secrets import secrets
 
@@ -52,7 +53,7 @@ SUBSET_TICKER = ["5SPYl_EQ"]
 
 
 # @cached(ttl_seconds=3600)
-def list_instruments() -> list[TradeableInstrument] | Exception:
+def list_instruments() -> list[TradeableInstrument] | ToolError:
     try:
         url = "https://demo.trading212.com/api/v0/equity/metadata/instruments"
 
@@ -68,7 +69,7 @@ def list_instruments() -> list[TradeableInstrument] | Exception:
             if (d["isin"] in SUBSET_ISIN or d["ticker"] in SUBSET_TICKER)
         ]
     except Exception as e:
-        return e
+        return ToolError(error_type="Failed to list instruments.", message=str(e))
 
 
 if __name__ == "__main__":

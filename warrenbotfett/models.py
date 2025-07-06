@@ -13,6 +13,8 @@ from pydantic import BaseModel, Field
 
 class Secrets(BaseModel):
     trading212_api_key: str
+    supabase_url: str
+    supabase_key: str
 
 
 class Account(BaseModel):

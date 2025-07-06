@@ -6,27 +6,26 @@ from warrenbotfett.api.instruments import list_instruments
 from warrenbotfett.api.orders import place_buy_order, place_sell_order
 from warrenbotfett.api.portfolio import (get_all_positions,
                                          get_specific_position)
+from warrenbotfett.common import BotSummary
+from warrenbotfett.db.write import store_summary
 
-# Configure Logfire to capture and send traces
 logfire.configure()
 logfire.instrument_pydantic_ai()
 
 load_dotenv()
 
 
-from pydantic import BaseModel, Field
+from pydantic_ai.models.google import GoogleModelSettings
 
-
-class BotSummary(BaseModel):
-    reasoning: str = Field(
-        description="a comprehensive reasonsing for the agent desscions. Regardless of whether trades have been made or not."
-    )
-
+settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
 
 agent = Agent(
     # model="openai:o3",
-    model="gpt-4o",
-    # model='google-gla:gemini-2.5-pro',
+    # model="gpt-4o",
+    model="google-gla:gemini-2.5-pro",
+    model_settings=GoogleModelSettings(
+        google_thinking_config={"include_thoughts": True}
+    ),
     deps_type=str,
     system_prompt=(
         "You are a stock investor that does thorough resaerch before any investments."
@@ -48,7 +47,8 @@ agent = Agent(
     output_type=BotSummary,
 )
 
-result: BotSummary = agent.run_sync(  # type: ignore
-    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
+summary: BotSummary = agent.run_sync(  # type: ignore
+    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end. Actually, make at least one trade."
 )
-print(result)
+success = store_summary(summary=summary)
+print(f"{success=}")

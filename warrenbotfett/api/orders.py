@@ -1,10 +1,11 @@
 import requests
 
+from warrenbotfett.common import ToolError
 from warrenbotfett.models import Order
 from warrenbotfett.utils.secrets import secrets
 
 
-def place_buy_order(ticker: str, quantity: float) -> Order | Exception:
+def place_buy_order(ticker: str, quantity: float) -> Order | ToolError:
     """Buying asset with specific ticker"""
 
     try:
@@ -23,12 +24,12 @@ def place_buy_order(ticker: str, quantity: float) -> Order | Exception:
         data = response.json()
         return Order(**data)
     except Exception as e:
-        return e
+        return ToolError(message=str(e), error_type="RequestError")
 
 
 def place_sell_order(
     ticker: str, quantity: float, stop_price: float
-) -> Order | Exception:
+) -> Order | ToolError:
     """Selling an asset with specific ticker
 
     The `quantity` needs to be negative.
@@ -53,7 +54,7 @@ def place_sell_order(
         data = response.json()
         return Order(**data)
     except Exception as e:
-        return e
+        return ToolError(message=str(e), error_type="RequestError")
 
 
 if __name__ == "__main__":

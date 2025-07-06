@@ -1,10 +1,11 @@
 import requests
 
+from warrenbotfett.common import ToolError
 from warrenbotfett.models import Cash
 from warrenbotfett.utils.secrets import secrets
 
 
-def cash() -> Cash | Exception:
+def cash() -> Cash | ToolError:
     try:
         url = "https://demo.trading212.com/api/v0/equity/account/cash"
 
@@ -14,9 +15,10 @@ def cash() -> Cash | Exception:
         response.raise_for_status()
 
         data = response.json()
+
         return Cash(**data)
     except Exception as e:
-        return e
+        return ToolError(message=str(e), error_type="Failed to read cash.")
 
 
 if __name__ == "__main__":
