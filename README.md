@@ -1,4 +1,4 @@
-## WarrenBOTfet
+## WarrenBOTfett
 The LLM powered value investor.  
 Let an agent built on pydantic-ai do some day trading.
 
