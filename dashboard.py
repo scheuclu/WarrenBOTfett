@@ -34,5 +34,4 @@ for date, s in summaries.items():
         reasoning_string = "\n".join(
             [" - " + tool_call.reasoning for tool_call in tool_calls]
         )
-        for i, too_call in enumerate(tool_calls):
-            st.markdown(reasoning_string)
+        st.markdown(reasoning_string)
