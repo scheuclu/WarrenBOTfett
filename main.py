@@ -47,8 +47,8 @@ agent = Agent(
     output_type=BotSummary,
 )
 
-summary: BotSummary = agent.run_sync(  # type: ignore
+run_result: AgentRunResult = agent.run_sync(  # type: ignore
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end. Actually, make at least one trade."
 )
-success = store_summary(summary=summary)
+success = store_summary(summary=run_result.output)
 print(f"{success=}")
