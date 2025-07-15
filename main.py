@@ -1,5 +1,6 @@
 import logfire
 from dotenv import load_dotenv
+from googlesearch import search
 from pydantic_ai import Agent, Tool
 from pydantic_ai.agent import AgentRunResult
 
@@ -7,8 +8,12 @@ from warrenbotfett.api.instruments import list_instruments
 from warrenbotfett.api.orders import place_buy_order, place_sell_order
 from warrenbotfett.api.portfolio import (get_all_positions,
                                          get_specific_position)
+from warrenbotfett.api.yf import get_instrument_history
 from warrenbotfett.common import BotSummary
 from warrenbotfett.db.write import store_summary
+
+search("Google")
+
 
 logfire.configure()
 logfire.instrument_pydantic_ai()
@@ -18,15 +23,16 @@ load_dotenv()
 
 from pydantic_ai.models.google import GoogleModelSettings
 
-settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
+settings = GoogleModelSettings(
+    google_thinking_config={"include_thoughts": True}, arbitrary_types_allowed=True
+)
+
 
 agent = Agent(
     # model="openai:o3",
     # model="gpt-4o",
     model="google-gla:gemini-2.5-pro",
-    model_settings=GoogleModelSettings(
-        google_thinking_config={"include_thoughts": True}
-    ),
+    model_settings=settings,
     system_prompt=(
         "You are a stock investor that does thorough resaerch before any investments."
         "You have access to trading212 via a bunch of tools."
@@ -41,6 +47,8 @@ agent = Agent(
         Tool(function=list_instruments),
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
+        Tool(function=get_instrument_history),
+        # tavily_search_tool("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"),
     ],
     end_strategy="exhaustive",  #'early'
     instrument=True,
@@ -48,7 +56,9 @@ agent = Agent(
 )
 
 run_result: AgentRunResult[BotSummary] = agent.run_sync(
-    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end. Actually, make at least one trade."
+    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
+    "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
+    "You don't have to make a trade if you think that is the best desicion."
 )
 success = store_summary(summary=run_result.output)
 print(f"{success=}")

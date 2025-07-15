@@ -16,9 +16,21 @@ class ToolCall(BaseModel):
     )
 
 
+class PositionAnalysis(BaseModel):
+    instrument: str = Field(
+        description="Name of the instrument we have an active position in."
+    )
+    report: str = Field(
+        description="Daily analysis of this position. This should be based on performance as well as recent news and market data."
+    )
+
+
 class BotSummary(BaseModel):
-    reasoning: str = Field(
-        description="a comprehensive reasonsing for the agent desscions. Regardless of whether trades have been made or not."
+    position_summaries: list[PositionAnalysis] = Field(
+        description="Analysis for every position we are active in"
+    )
+    overall_summary: str = Field(
+        description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."
     )
     tool_calls: list[ToolCall] = Field(
         description="List of tool calls that the agent has made to make a trade. No tool calls that are just reading data."

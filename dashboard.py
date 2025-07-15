@@ -19,15 +19,20 @@ cols = st.columns([2, 10])
 st.subheader("History")
 for date, s in summaries.items():
     with st.expander(label=date.strftime("%Y-%m-%d"), expanded=True):
-        st.markdown("### Reasoning")
+        # st.markdown("# Reasoning")
 
         cols = st.columns([1, 11])
         with cols[0]:
             st.image("./WarrenBOTfet_nobg.png")
         with cols[1]:
-            st.markdown(s.reasoning)
+            st.markdown("## Holdings")
+            for summary in s.position_summaries:
+                st.markdown(f" - {summary.instrument}")
+                st.markdown(summary.report)
+        st.markdown("## Summary")
+        st.markdown(s.overall_summary)
 
-        st.markdown("### Actions")
+        st.markdown("## Actions")
 
         tool_calls: list[ToolCall] = s.tool_calls
 
