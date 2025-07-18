@@ -32,6 +32,7 @@ agent = Agent(
     # model="openai:o3",
     # model="gpt-4o",
     model="google-gla:gemini-2.5-pro",
+    # model="google-gla:gemini-2.5-flash",
     model_settings=settings,
     system_prompt=(
         "You are a stock investor that does thorough resaerch before any investments."
@@ -55,10 +56,20 @@ agent = Agent(
     output_type=BotSummary,
 )
 
+
+message_history = []
 run_result: AgentRunResult[BotSummary] = agent.run_sync(
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
     "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
-    "You don't have to make a trade if you think that is the best desicion."
+    "You don't have to make a trade if you think that is the best desicion. Make at least one trade.",
+    message_history=message_history,
 )
-success = store_summary(summary=run_result.output)
+
+for message in run_result.all_messages():
+    print(message.kind)
+    for part in message.parts:
+        print(" ", part)
+
+
+success = store_summary(run_result=run_result)
 print(f"{success=}")

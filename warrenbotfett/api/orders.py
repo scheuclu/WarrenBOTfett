@@ -1,3 +1,4 @@
+import logfire
 import requests
 
 from warrenbotfett.common import ToolError
@@ -24,6 +25,7 @@ def place_buy_order(ticker: str, quantity: float) -> Order | ToolError:
         data = response.json()
         return Order(**data)
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(message=str(e), error_type="RequestError")
 
 
@@ -54,10 +56,13 @@ def place_sell_order(
         data = response.json()
         return Order(**data)
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(message=str(e), error_type="RequestError")
 
 
 if __name__ == "__main__":
-    pass
-    # place_buy_order(ticker="5SPYl_EQ", quantity=-0.01)
+    # pass
+    # result = place_buy_order(ticker="5SPYl_EQ", quantity='0.01')
+    result = place_sell_order(ticker="AMZN_US_EQ", quantity=0.01, stop_price=2960.0)
+    print(result)
     # place_sell_order(ticker='5SPYl_EQ', quantity=0.01, stop_price=2960.0)

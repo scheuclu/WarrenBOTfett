@@ -1,6 +1,7 @@
 import asyncio
 import time
 
+import logfire
 import requests
 from dotenv import load_dotenv
 
@@ -25,6 +26,7 @@ def get_all_positions() -> list[Position] | ToolError:
         data = response.json()
         return [Position(**d) for d in data]
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(message=str(e), error_type="RequestError")
 
 
@@ -51,6 +53,7 @@ async def get_specific_position(
             # log.info(str(data))
             return Position(**data)
         except Exception as e:
+            logfire.error(str(e))
             return ToolError(message=str(e), error_type="RequestError")
 
 

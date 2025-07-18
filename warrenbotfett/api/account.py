@@ -1,3 +1,4 @@
+import logfire
 import requests
 
 from warrenbotfett.common import ToolError
@@ -18,6 +19,7 @@ def cash() -> Cash | ToolError:
 
         return Cash(**data)
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(message=str(e), error_type="Failed to read cash.")
 
 

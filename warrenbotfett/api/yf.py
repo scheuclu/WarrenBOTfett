@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
+import logfire
 import yfinance as yf
 from pydantic import BaseModel, Field
 
@@ -44,6 +45,7 @@ def get_instrument_history(req: StockHistoryRequest) -> list[DailyPrices] | Tool
             for date, row in history.iterrows()
         ]
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(message=str(e), error_type="RequestError")
 
 

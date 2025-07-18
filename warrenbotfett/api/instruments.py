@@ -1,3 +1,4 @@
+import logfire
 import requests
 from diskcache import Cache
 from dotenv import load_dotenv
@@ -69,6 +70,7 @@ def list_instruments() -> list[TradeableInstrument] | ToolError:
             if (d["isin"] in SUBSET_ISIN or d["ticker"] in SUBSET_TICKER)
         ]
     except Exception as e:
+        logfire.error(str(e))
         return ToolError(error_type="Failed to list instruments.", message=str(e))
 
 
