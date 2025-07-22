@@ -58,7 +58,10 @@ def list_instruments() -> list[TradeableInstrument] | ToolError:
     try:
         url = "https://demo.trading212.com/api/v0/equity/metadata/instruments"
 
-        headers = {"Authorization": secrets.trading212_api_key}
+        headers = {
+            "Authorization": secrets.trading212_api_key,
+            "Content-Type": "application/json",
+        }
 
         response = requests.get(url, headers=headers)
         response.raise_for_status()

@@ -10,7 +10,10 @@ def cash() -> Cash | ToolError:
     try:
         url = "https://demo.trading212.com/api/v0/equity/account/cash"
 
-        headers = {"Authorization": secrets.trading212_api_key}
+        headers = {
+            "Authorization": secrets.trading212_api_key,
+            "Content-Type": "application/json",
+        }
 
         response = requests.get(url, headers=headers)
         response.raise_for_status()

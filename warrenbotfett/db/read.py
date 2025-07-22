@@ -37,7 +37,6 @@ if __name__ == "__main__":
     d = data[0]
     import json
 
-
     messages = json.loads(d["messages"])
     for m in messages:
         print(m["kind"])

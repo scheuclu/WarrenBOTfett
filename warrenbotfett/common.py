@@ -17,11 +17,14 @@ class ToolCall(BaseModel):
         description="Reasoning behind the agent making this particular tool call."
     )
 
+from warrenbotfett.api.yf import InstrumentInformation
+
 
 class PositionAnalysis(BaseModel):
     instrument: str = Field(
         description="Name of the instrument we have an active position in."
     )
+    instrument_history: InstrumentInformation = Field(description="The full instrument history. This was used (among other things) to make agent desicions.`")
     report: str = Field(
         description="Daily analysis of this position. This should be based on performance as well as recent news and market data."
     )
@@ -29,7 +32,7 @@ class PositionAnalysis(BaseModel):
 
 class BotSummary(BaseModel):
     position_summaries: list[PositionAnalysis] = Field(
-        description="Analysis for every position we are active in"
+        description="Analysis for every position we are active in or consider to be active in."
     )
     overall_summary: str = Field(
         description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."

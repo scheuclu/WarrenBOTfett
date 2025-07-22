@@ -17,7 +17,10 @@ def get_all_positions() -> list[Position] | ToolError:
     try:
         url = "https://demo.trading212.com/api/v0/equity/portfolio"
 
-        headers = {"Authorization": secrets.trading212_api_key}
+        headers = {
+            "Authorization": secrets.trading212_api_key,
+            "Content-Type": "application/json",
+        }
 
         time.sleep(5)
         response = requests.get(url, headers=headers)
@@ -43,7 +46,10 @@ async def get_specific_position(
         try:
             url = "https://demo.trading212.com/api/v0/equity/portfolio/" + ticker
 
-            headers = {"Authorization": secrets.trading212_api_key}
+            headers = {
+                "Authorization": secrets.trading212_api_key,
+                "Content-Type": "application/json",
+            }
 
             time.sleep(1)
             response = requests.get(url, headers=headers)

@@ -17,7 +17,10 @@ def place_buy_order(ticker: str, quantity: float) -> Order | ToolError:
             "ticker": ticker,  # "AAPL_US_EQ"
         }
 
-        headers = {"Authorization": secrets.trading212_api_key}
+        headers = {
+            "Authorization": secrets.trading212_api_key,
+            "Content-Type": "application/json",
+        }
 
         response = requests.post(url, json=payload, headers=headers)
         response.raise_for_status()
@@ -62,7 +65,7 @@ def place_sell_order(
 
 if __name__ == "__main__":
     # pass
-    # result = place_buy_order(ticker="5SPYl_EQ", quantity='0.01')
-    result = place_sell_order(ticker="AMZN_US_EQ", quantity=0.01, stop_price=2960.0)
+    result = place_buy_order(ticker="AAPL_US_EQ", quantity=0.1)
+    # result = place_sell_order(ticker="AMZN_US_EQ", quantity=0.01, stop_price=2960.0)
     print(result)
     # place_sell_order(ticker='5SPYl_EQ', quantity=0.01, stop_price=2960.0)

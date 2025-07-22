@@ -27,8 +27,7 @@ settings = GoogleModelSettings(
     google_thinking_config={"include_thoughts": True}, arbitrary_types_allowed=True
 )
 
-
-agent = Agent(
+analyst_agent = Agent(
     # model="openai:o3",
     # model="gpt-4o",
     model="google-gla:gemini-2.5-pro",
@@ -49,7 +48,7 @@ agent = Agent(
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
         Tool(function=get_instrument_history),
-        # tavily_search_tool("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"),
+        #tavily_search_tool("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"),
     ],
     end_strategy="exhaustive",  #'early'
     instrument=True,
@@ -57,8 +56,10 @@ agent = Agent(
 )
 
 
+
+
 message_history = []
-run_result: AgentRunResult[BotSummary] = agent.run_sync(
+run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
     "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
     "You don't have to make a trade if you think that is the best desicion. Make at least one trade.",
