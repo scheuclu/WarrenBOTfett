@@ -216,14 +216,9 @@ supported_instruments: list[WarrentBOTfettInstrument] = [
         yfinance_ticker=YFinanceTicker.LLY,
     ),
     WarrentBOTfettInstrument(
-        name="Heidelberger Druck",
+        name="Home Depot",
         trading212_ticker=Trading212Ticker.HDId_EQ,
         yfinance_ticker=YFinanceTicker.HDI_DE,
-    ),
-    WarrentBOTfettInstrument(
-        name="3V64 Fund",
-        trading212_ticker=Trading212Ticker.THREE_V64d_EQ,
-        yfinance_ticker=YFinanceTicker.THREE_V64_DE,
     ),
     WarrentBOTfettInstrument(
         name="Meta (Facebook)",
@@ -255,11 +250,11 @@ supported_instruments: list[WarrentBOTfettInstrument] = [
     #     trading212_ticker=Trading212Ticker.LLYd_EQ,
     #     yfinance_ticker=YFinanceTicker.LLY_ALT,
     # ),
-    # WarrentBOTfettInstrument(
-    #     name="Walmart",
-    #     trading212_ticker=Trading212Ticker.WMT_US_EQ,
-    #     yfinance_ticker=YFinanceTicker.WMT,
-    # ),
+    WarrentBOTfettInstrument(
+        name="Walmart",
+        trading212_ticker=Trading212Ticker.WMT_US_EQ,
+        yfinance_ticker=YFinanceTicker.WMT,
+    ),
     # WarrentBOTfettInstrument(
     #     name="ABEA",
     #     trading212_ticker=Trading212Ticker.ABEAd_EQ,
@@ -270,11 +265,11 @@ supported_instruments: list[WarrentBOTfettInstrument] = [
     #     trading212_ticker=Trading212Ticker.GOOGL_US_EQ,
     #     yfinance_ticker=YFinanceTicker.GOOGL,
     # ),
-    # WarrentBOTfettInstrument(
-    #     name="Mastercard",
-    #     trading212_ticker=Trading212Ticker.MA_US_EQ,
-    #     yfinance_ticker=YFinanceTicker.MA,
-    # ),
+    WarrentBOTfettInstrument(
+        name="Mastercard",
+        trading212_ticker=Trading212Ticker.MA_US_EQ,
+        yfinance_ticker=YFinanceTicker.MA,
+    ),
     # WarrentBOTfettInstrument(
     #     name="Walmart (alt)",
     #     trading212_ticker=Trading212Ticker.WMTd_EQ,
@@ -285,11 +280,11 @@ supported_instruments: list[WarrentBOTfettInstrument] = [
     #     trading212_ticker=Trading212Ticker.PRGd_EQ,
     #     yfinance_ticker=YFinanceTicker.PRG,
     # ),
-    # WarrentBOTfettInstrument(
-    #     name="Visa",
-    #     trading212_ticker=Trading212Ticker.V_US_EQ,
-    #     yfinance_ticker=YFinanceTicker.V,
-    # ),
+    WarrentBOTfettInstrument(
+        name="Visa",
+        trading212_ticker=Trading212Ticker.V_US_EQ,
+        yfinance_ticker=YFinanceTicker.V,
+    ),
     # WarrentBOTfettInstrument(
     #     name="Nvidia (alt)",
     #     trading212_ticker=Trading212Ticker.NVDd_EQ,
@@ -340,11 +335,11 @@ supported_instruments: list[WarrentBOTfettInstrument] = [
     #     trading212_ticker=Trading212Ticker.XOM_US_EQ,
     #     yfinance_ticker=YFinanceTicker.XOM,
     # ),
-    # WarrentBOTfettInstrument(
-    #     name="UnitedHealth",
-    #     trading212_ticker=Trading212Ticker.UNH_US_EQ,
-    #     yfinance_ticker=YFinanceTicker.UNH,
-    # ),
+    WarrentBOTfettInstrument(
+        name="UnitedHealth",
+        trading212_ticker=Trading212Ticker.UNH_US_EQ,
+        yfinance_ticker=YFinanceTicker.UNH,
+    ),
     # WarrentBOTfettInstrument(
     #     name="Nvidia",
     #     trading212_ticker=Trading212Ticker.NVDA_US_EQ,
