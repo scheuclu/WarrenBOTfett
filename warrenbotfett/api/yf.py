@@ -66,7 +66,11 @@ async def get_news_articles(req: StockHistoryRequest) -> RawNewsInformation | To
 
 data_collection_agent = Agent(
     model="google-gla:gemini-2.5-flash",
-    system_prompt="Your job is to create a news summary of a given company characterized by a given ticker. As far as prices go, we look back 1 month by default. You have a tool to get the raw news articles. THen you just need to extract information and summarize",
+    system_prompt="Your job is to create a news summary of a given company characterized by a given ticker. "
+                  "As far as prices go, we look back 1 month by default. You have a tool to get the raw news articles. "
+                  "THen you just need to extract information and summarize. The output has a field summary. "
+                  "THis will summarize all the news article that have been analyzed. "
+                  "You should make at least 500 charcters here if you can. If you dont have any news to process, just write it there.",
     tools=[Tool(function=get_news_articles)],
     end_strategy="exhaustive",
     instrument=True,

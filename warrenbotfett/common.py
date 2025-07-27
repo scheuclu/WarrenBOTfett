@@ -38,7 +38,7 @@ class NewsInterpretation(BaseModel):
     )
     summary: str = Field(
         "Summary of the current news. Ideally around 1000 characters. If no news can Be found, put the phrase `No news found` 20 times",
-        min_length=100,
+        min_length=0,
         max_length=2000,
     )
 
@@ -110,16 +110,16 @@ class Trading212Ticker(Enum):
     # MA_US_EQ = "MA_US_EQ"
     # WMTd_EQ = "WMTd_EQ"
     # PRGd_EQ = "PRGd_EQ"
-    # V_US_EQ = "V_US_EQ"
-    # NVDd_EQ = "NVDd_EQ"
-    # AVGO_US_EQ = "AVGO_US_EQ"
-    # FB2Ad_EQ = "FB2Ad_EQ"
-    # CTOd_EQ = "CTOd_EQ"
-    # MSFd_EQ = "MSFd_EQ"
-    # JPM_US_EQ = "JPM_US_EQ"
-    # TSLA_US_EQ = "TSLA_US_EQ"
-    # COST_US_EQ = "COST_US_EQ"
-    # TL0d_EQ = "TL0d_EQ"
+    V_US_EQ = "V_US_EQ"
+    NVDd_EQ = "NVDd_EQ"
+    AVGO_US_EQ = "AVGO_US_EQ"
+    FB2Ad_EQ = "FB2Ad_EQ"
+    CTOd_EQ = "CTOd_EQ"
+    MSFd_EQ = "MSFd_EQ"
+    JPM_US_EQ = "JPM_US_EQ"
+    TSLA_US_EQ = "TSLA_US_EQ"
+    COST_US_EQ = "COST_US_EQ"
+    TL0d_EQ = "TL0d_EQ"
     # XOM_US_EQ = "XOM_US_EQ"
     # UNH_US_EQ = "UNH_US_EQ"
     # NVDA_US_EQ = "NVDA_US_EQ"
