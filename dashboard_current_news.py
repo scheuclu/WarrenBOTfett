@@ -13,16 +13,14 @@ import streamlit as st
 from warrenbotfett.api.yf import data_collection_agent
 from warrenbotfett.common import (NewsInterpretation,
                                   NewsInterpretationSentiment,
-                                  Trading212Ticker)
+                                  supported_instruments)
 
 
 async def run_all() -> list[NewsInterpretation]:
     result = await asyncio.gather(
         *[
-            data_collection_agent.run(
-                ticker.value.replace("_US", "").replace("_EQ", "")
-            )
-            for ticker in Trading212Ticker
+            data_collection_agent.run(instrument.model_dump_json())
+            for instrument in supported_instruments
         ]
     )
     return [r.output for r in result]
@@ -35,7 +33,7 @@ def get_results() -> list[NewsInterpretation]:
 
 
 for info in get_results():
-    st.subheader(info.ticker)
+    st.subheader(info.name)
     st.markdown(f"**number or articles:** {info.num_articles}")
     content = info.summary.replace("$", r"\$")
     # st.markdown(f"### {news.title}")

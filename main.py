@@ -8,7 +8,7 @@ from warrenbotfett.api.instruments import list_instruments
 from warrenbotfett.api.orders import place_buy_order, place_sell_order
 from warrenbotfett.api.portfolio import (get_all_positions,
                                          get_specific_position)
-from warrenbotfett.api.yf import get_instrument_history
+# from warrenbotfett.api.yf import get_instrument_history
 from warrenbotfett.common import BotSummary
 from warrenbotfett.db.write import store_summary
 
@@ -23,9 +23,7 @@ load_dotenv()
 
 from pydantic_ai.models.google import GoogleModelSettings
 
-settings = GoogleModelSettings(
-    google_thinking_config={"include_thoughts": True}, arbitrary_types_allowed=True
-)
+settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
 
 analyst_agent = Agent(
     # model="openai:o3",
@@ -47,7 +45,7 @@ analyst_agent = Agent(
         Tool(function=list_instruments),
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
-        Tool(function=get_instrument_history),
+        # Tool(function=get_instrument_history),
         # tavily_search_tool("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"),
     ],
     end_strategy="exhaustive",  #'early'
