@@ -36,6 +36,7 @@ def get_results() -> list[NewsInterpretation]:
 
 for info in get_results():
     st.subheader(info.ticker)
+    st.markdown(f"**number or articles:** {info.num_articles}")
     content = info.summary.replace("$", r"\$")
     # st.markdown(f"### {news.title}")
     if info.sentiment == NewsInterpretationSentiment.POSITIVE:

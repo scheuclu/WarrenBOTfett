@@ -32,9 +32,11 @@ class NewsInterpretationSentiment(StrEnum):
 
 
 class NewsInterpretation(BaseModel):
+    """This datas structure holds a summary of the news articles analyzed for a particular Stock/instrument."""
     ticker: str = Field("Ticker of the company that has been analyzed")
+    num_articles: int = Field(description="The number of news articles that have been sucessfully processed for this Interpretation.", ge=0)
     sentiment: NewsInterpretationSentiment = Field(
-        description="A characterterization of how the general sentiment of the news articles is. If not enought data, do `NEUTRAL`. If very good select `POSITIVE` if bad, select `NEGATIVE`."
+        description="A characterization of how the general sentiment of the news articles is. Options are `POSITIVE`, 'NEGATIVE` and `NEUTRAL`. If in doubt, do `NEUTRAL`."
     )
     summary: str = Field(
         "Summary of the current news. Ideally around 1000 characters. If no news can Be found, put the phrase `No news found` 20 times",
