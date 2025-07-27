@@ -48,14 +48,12 @@ analyst_agent = Agent(
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
         Tool(function=get_instrument_history),
-        #tavily_search_tool("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"),
+        # tavily_search_tool("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"),
     ],
     end_strategy="exhaustive",  #'early'
     instrument=True,
     output_type=BotSummary,
 )
-
-
 
 
 message_history = []
