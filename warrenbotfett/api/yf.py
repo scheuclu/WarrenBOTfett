@@ -65,7 +65,7 @@ async def get_news_articles(req: StockHistoryRequest) -> RawNewsInformation | To
 
 
 data_collection_agent = Agent(
-    model="google-gla:gemini-2.5-pro",
+    model="google-gla:gemini-2.5-flash",
     system_prompt="Your job is to create a news summary of a given company characterized by a given ticker. As far as prices go, we look back 1 month by default. You have a tool to get the raw news articles. THen you just need to extract information and summarize",
     tools=[Tool(function=get_news_articles)],
     end_strategy="exhaustive",
@@ -80,9 +80,12 @@ if __name__ == "__main__":
         result = await asyncio.gather(
             data_collection_agent.run("AAPL"),
             data_collection_agent.run("MSFT"),
-            # data_collection_agent.run("GOOG"),
+            data_collection_agent.run("GOOG"),
         )
         return [i.output for i in result]
 
+    import time
+    start = time.time()
     result = asyncio.run(run_all())
+    print(time.time()-start)
     print("Done")
