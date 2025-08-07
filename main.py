@@ -58,7 +58,7 @@ message_history = []
 run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
     "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
-    "You don't have to make a trade if you think that is the best desicion. Make at least one trade.",
+    "You don't have to make a trade if you think that is the best desicion.",
     message_history=message_history,
 )
 
