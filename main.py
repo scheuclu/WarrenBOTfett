@@ -17,6 +17,7 @@ search("Google")
 
 logfire.configure()
 logfire.instrument_pydantic_ai()
+logfire.instrument_requests()
 
 load_dotenv()
 
@@ -24,6 +25,12 @@ load_dotenv()
 from pydantic_ai.models.google import GoogleModelSettings
 
 settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
+
+from warrenbotfett.common import supported_instruments, WarrentBOTfettInstrument
+
+def list_supported_instruments() -> list[WarrentBOTfettInstrument]:
+    """This function returns the list of all supported investment vehicles. Every vehicle(instrument) has a ticker for Trading212 tools and one for yfinance tools. """
+    return supported_instruments
 
 analyst_agent = Agent(
     # model="openai:o3",
@@ -45,6 +52,7 @@ analyst_agent = Agent(
         Tool(function=list_instruments),
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
+        Tool(function=list_supported_instruments)
         # Tool(function=get_instrument_history),
         # tavily_search_tool("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"),
     ],
@@ -60,6 +68,7 @@ run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
     "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
     "You don't have to make a trade if you think that is the best desicion. Make at least one trade.",
     message_history=message_history,
+    parallel=False
 )
 
 for message in run_result.all_messages():

@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     async def run_all():
         result = await asyncio.gather(
-            data_collection_agent.run(supported_instruments[0].model_dump_json()),
+            *[data_collection_agent.run(supported_instrument.model_dump_json()) for supported_instrument in supported_instruments],
             # data_collection_agent.run('AAPL'),
         )
         return [i.output for i in result]
@@ -92,6 +92,7 @@ if __name__ == "__main__":
 
     start = time.time()
     result = asyncio.run(run_all())
-    print(result)
+    for r in result:
+        print(r)
     print(time.time() - start)
     print("Done")
