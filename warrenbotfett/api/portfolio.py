@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from warrenbotfett.common import ToolError
 from warrenbotfett.models import Position
 from warrenbotfett.utils.secrets import secrets
+from warrenbotfett.common import Trading212Ticker
 
 load_dotenv()
 
@@ -40,11 +41,12 @@ from warrenbotfett.common import ToolError
 
 
 async def get_specific_position(
-    ticker: str,
-) -> Position | ToolError:  # TODO: type the valid tickers. Make it
+    ticker: Trading212Ticker,
+) -> Position | ToolError:
+    "Get all data about the holdings of a particular ticker on Trading212."
     async with get_specific_position_lock:
         try:
-            url = "https://demo.trading212.com/api/v0/equity/portfolio/" + ticker
+            url = "https://demo.trading212.com/api/v0/equity/portfolio/" + ticker.value
 
             headers = {
                 "Authorization": secrets.trading212_api_key,

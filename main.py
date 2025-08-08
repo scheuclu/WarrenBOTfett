@@ -11,6 +11,7 @@ from warrenbotfett.api.portfolio import (get_all_positions,
 # from warrenbotfett.api.yf import get_instrument_history
 from warrenbotfett.common import BotSummary
 from warrenbotfett.db.write import store_summary
+from warrenbotfett.api.yf import read_all_news
 
 search("Google")
 
@@ -41,18 +42,19 @@ analyst_agent = Agent(
     system_prompt=(
         "You are a stock investor that does thorough resaerch before any investments."
         "You have access to trading212 via a bunch of tools."
-        "Your first task always is to check the list of instruments(things to invest in) using the tool you got."
+        "Your first task always is to check the list of instruments(things to invest in) using the tool you got. Call this tool only once. It gives you information for everything."
         "Then you fetch all positions I already have."
-        "Next you cehck news and ratings to figure out what is currently good to hold or not"
+        "Next you cehck news and ratings to figure out what is currently good to hold or not."
         "Then you get back to fullfill the user instruction"
     ),
     tools=[
         Tool(function=get_all_positions),
         Tool(function=get_specific_position),
-        Tool(function=list_instruments),
+        # Tool(function=list_instruments),
+        Tool(function=list_supported_instruments),
+        Tool(function=read_all_news),
         Tool(function=place_buy_order),
         Tool(function=place_sell_order),
-        Tool(function=list_supported_instruments)
         # Tool(function=get_instrument_history),
         # tavily_search_tool("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"),
     ],
@@ -65,8 +67,8 @@ analyst_agent = Agent(
 message_history = []
 run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
-    "You have all the tools avaialble, so you can trade. Be desicive. Summarize what you did at the end."
-    "You don't have to make a trade if you think that is the best desicion. Make at least one trade.",
+    "You have all the tools avaialble, so you can trade. Allways read all news, you have a tools for that.  Be desicive. Summarize what you did at the end."
+    "You don't have to make a trade if you think that is the best desicion.",
     message_history=message_history,
     parallel=False
 )

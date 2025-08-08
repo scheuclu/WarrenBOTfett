@@ -2,6 +2,7 @@ from enum import Enum, StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, Field
+from pydantic import ConfigDict
 
 
 class ToolError(BaseModel):
@@ -185,6 +186,7 @@ class YFinanceTicker(Enum):
 
 
 class WarrentBOTfettInstrument(BaseModel):
+    model_config = ConfigDict(frozen=True)
     name: str = Field(description="A human readable name of the company")
     trading212_ticker: Trading212Ticker = Field(
         description="Ticker string used for trading212 APIs"

@@ -14,7 +14,7 @@ from dev import extract_article_text
 from warrenbotfett.common import (NewsInterpretation, NewsPiece,
                                   RawNewsInformation, YFinanceTicker,
                                   supported_instruments)
-
+from warrenbotfett.common import WarrentBOTfettInstrument
 logfire.configure()
 logfire.instrument_pydantic_ai()
 
@@ -77,6 +77,19 @@ data_collection_agent = Agent(
     instrument=True,
     output_type=NewsInterpretation,
 )
+
+
+def read_all_news() -> dict[WarrentBOTfettInstrument, NewsInterpretation]:
+    """This function reads and interprets the news for every supported Instrument."""
+    async def run_all():
+        result = await asyncio.gather(
+            *[data_collection_agent.run(supported_instrument.model_dump_json()) for supported_instrument in supported_instruments],
+        )
+        return [i.output for i in result]
+
+    result = asyncio.run(run_all())
+    return {instrument:news_interpretation for instrument, news_interpretation in zip(supported_instruments, result)}
+
 
 
 if __name__ == "__main__":

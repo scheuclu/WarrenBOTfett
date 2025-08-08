@@ -4,17 +4,17 @@ import requests
 from warrenbotfett.common import ToolError
 from warrenbotfett.models import Order
 from warrenbotfett.utils.secrets import secrets
+from warrenbotfett.common import WarrentBOTfettInstrument, Trading212Ticker
 
-
-def place_buy_order(ticker: str, quantity: float) -> Order | ToolError:
-    """Buying asset with specific ticker"""
+def place_buy_order(ticker: Trading212Ticker, quantity: float) -> Order | ToolError:
+    """Buying asset with specific ticker on Trading212"""
 
     try:
         url = "https://demo.trading212.com/api/v0/equity/orders/market"
 
         payload = {
             "quantity": quantity,
-            "ticker": ticker,  # "AAPL_US_EQ"
+            "ticker": ticker.value,  # "AAPL_US_EQ"
         }
 
         headers = {
@@ -33,9 +33,9 @@ def place_buy_order(ticker: str, quantity: float) -> Order | ToolError:
 
 
 def place_sell_order(
-    ticker: str, quantity: float, stop_price: float
+    ticker: Trading212Ticker, quantity: float, stop_price: float
 ) -> Order | ToolError:
-    """Selling an asset with specific ticker
+    """Selling an asset with specific ticker on Trading212.
 
     The `quantity` needs to be negative.
     """
@@ -45,7 +45,7 @@ def place_sell_order(
         payload = {
             "quantity": quantity,  # 0.01
             "stopPrice": stop_price,  # 2960
-            "ticker": ticker,
+            "ticker": ticker.value,
             "timeValidity": "DAY",
         }
 
@@ -65,7 +65,7 @@ def place_sell_order(
 
 if __name__ == "__main__":
     # pass
-    result = place_buy_order(ticker="AAPL_US_EQ", quantity=0.1)
+    result = place_buy_order(ticker=Trading212Ticker.AAPL_US_EQ, quantity=0.1)
     # result = place_sell_order(ticker="AMZN_US_EQ", quantity=0.01, stop_price=2960.0)
     print(result)
     # place_sell_order(ticker='5SPYl_EQ', quantity=0.01, stop_price=2960.0)
