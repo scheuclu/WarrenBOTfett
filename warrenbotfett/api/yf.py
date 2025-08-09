@@ -7,18 +7,13 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from pydantic_ai import Agent, Tool
 
-from warrenbotfett.common import ToolError
+from warrenbotfett.common import NewsInterpretationSentiment, ToolError
 
 load_dotenv()
 from dev import extract_article_text
-from warrenbotfett.common import (
-    NewsInterpretation,
-    NewsPiece,
-    RawNewsInformation,
-    WarrentBOTfettInstrument,
-    YFinanceTicker,
-    supported_instruments,
-)
+from warrenbotfett.common import (NewsInterpretation, NewsPiece,
+                                  RawNewsInformation, WarrentBOTfettInstrument,
+                                  YFinanceTicker, supported_instruments)
 
 logfire.configure()
 logfire.instrument_pydantic_ai()
@@ -48,7 +43,12 @@ async def read_yahoo_news_article(url: str) -> NewsInterpretation:
     soup = BeautifulSoup(html, "html.parser")
     body_div = soup.find("div", class_="body")
     if not body_div:
-        return ""
+        return NewsInterpretation(
+            name="Unknown.",  # TODO
+            num_articles=0,
+            sentiment=NewsInterpretationSentiment.NEUTRAL,
+            summary="",
+        )
 
     content = await data_collection_agent.run(str(body_div))
     return content.output

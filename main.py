@@ -5,9 +5,9 @@ from pydantic_ai import Agent, Tool
 from pydantic_ai.agent import AgentRunResult
 
 from warrenbotfett.api.orders import place_buy_order, place_sell_order
-from warrenbotfett.api.portfolio import get_all_positions, get_specific_position
+from warrenbotfett.api.portfolio import (get_all_positions,
+                                         get_specific_position)
 from warrenbotfett.api.yf import read_all_news
-
 # from warrenbotfett.api.yf import get_instrument_history
 from warrenbotfett.common import BotSummary
 from warrenbotfett.db.write import store_summary
@@ -26,7 +26,8 @@ from pydantic_ai.models.google import GoogleModelSettings
 
 settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
 
-from warrenbotfett.common import WarrentBOTfettInstrument, supported_instruments
+from warrenbotfett.common import (WarrentBOTfettInstrument,
+                                  supported_instruments)
 
 
 def list_supported_instruments() -> list[WarrentBOTfettInstrument]:
@@ -67,11 +68,8 @@ analyst_agent = Agent(
 
 message_history = []
 run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
-    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting."
-    "You have all the tools avaialble, so you can trade. Allways read all news, you have a tools for that.  Be desicive. Summarize what you did at the end."
-    "You don't have to make a trade if you think that is the best desicion.",
+    user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Allways read all news, you have a tools for that.  Be desicive. Summarize what you did at the end. You don't have to make a trade if you think that is the best desicion.",
     message_history=message_history,
-    parallel=False,
 )
 
 for message in run_result.all_messages():
