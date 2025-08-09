@@ -1,0 +1,34 @@
+name: Daily Python Run
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Every weekday (Mon-Fri) at 09:00 UTC
+  workflow_dispatch:       # Allow manual triggering
+
+env:
+  TRADING212_KEY: ${{ secrets.TRADING212_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  LOGFIRE_TOKEN: ${{ secrets.LOGFIRE_TOKEN }}
+
+jobs:
+  run-python-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Sync dependencies
+        run: uv sync --all-extras
+
+      - name: Run Python script
+        run: uv run python scripts/write_sp500_performance_analysis.py

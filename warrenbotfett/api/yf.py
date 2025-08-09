@@ -19,6 +19,11 @@ logfire.configure()
 logfire.instrument_pydantic_ai()
 
 
+from warrenbotfett.common import YFinanceTicker
+def get_instrument_price(ticker: YFinanceTicker) -> float: #TODO make async
+    tick = yf.Ticker(ticker.value)
+    return tick.info['previousClose']
+
 async def read_yahoo_news_article(url: str) -> str:
     print(f"Fetching: {url}")
     headers = {
@@ -93,19 +98,21 @@ def read_all_news() -> dict[WarrentBOTfettInstrument, NewsInterpretation]:
 
 
 if __name__ == "__main__":
+    result = get_instrument_price(YFinanceTicker.SPY)
+    print(f"{result=}")
 
-    async def run_all():
-        result = await asyncio.gather(
-            *[data_collection_agent.run(supported_instrument.model_dump_json()) for supported_instrument in supported_instruments],
-            # data_collection_agent.run('AAPL'),
-        )
-        return [i.output for i in result]
-
-    import time
-
-    start = time.time()
-    result = asyncio.run(run_all())
-    for r in result:
-        print(r)
-    print(time.time() - start)
-    print("Done")
+    # async def run_all():
+    #     result = await asyncio.gather(
+    #         *[data_collection_agent.run(supported_instrument.model_dump_json()) for supported_instrument in supported_instruments],
+    #         # data_collection_agent.run('AAPL'),
+    #     )
+    #     return [i.output for i in result]
+    #
+    # import time
+    #
+    # start = time.time()
+    # result = asyncio.run(run_all())
+    # for r in result:
+    #     print(r)
+    # print(time.time() - start)
+    # print("Done")
