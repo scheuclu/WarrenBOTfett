@@ -7,16 +7,15 @@ from warrenbotfett.utils.secrets import secrets
 supabase: Client = create_client(secrets.supabase_url, secrets.supabase_key)
 
 
-def store_sp500_performance_analysis(portfolio_value_usd: float, spy_usd: float) -> bool:
+def store_sp500_performance_analysis(
+    portfolio_value_usd: float, spy_usd: float
+) -> bool:
     response = (
         supabase.table("sp500_benchmark")
-        .insert({"sp500_price": spy_usd, 'portfolio_value': portfolio_value_usd})
+        .insert({"sp500_price": spy_usd, "portfolio_value": portfolio_value_usd})
         .execute()
     )
     return response.data is not None and len(response.data) != 0
-
-
-
 
 
 def store_summary(run_result: AgentRunResult[BotSummary]) -> bool:

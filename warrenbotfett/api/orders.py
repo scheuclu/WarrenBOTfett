@@ -1,10 +1,10 @@
 import logfire
 import requests
 
-from warrenbotfett.common import ToolError
+from warrenbotfett.common import ToolError, Trading212Ticker
 from warrenbotfett.models import Order
 from warrenbotfett.utils.secrets import secrets
-from warrenbotfett.common import WarrentBOTfettInstrument, Trading212Ticker
+
 
 def place_buy_order(ticker: Trading212Ticker, quantity: float) -> Order | ToolError:
     """Buying asset with specific ticker on Trading212"""

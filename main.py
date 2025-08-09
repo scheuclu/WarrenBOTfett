@@ -4,14 +4,13 @@ from googlesearch import search
 from pydantic_ai import Agent, Tool
 from pydantic_ai.agent import AgentRunResult
 
-from warrenbotfett.api.instruments import list_instruments
 from warrenbotfett.api.orders import place_buy_order, place_sell_order
-from warrenbotfett.api.portfolio import (get_all_positions,
-                                         get_specific_position)
+from warrenbotfett.api.portfolio import get_all_positions, get_specific_position
+from warrenbotfett.api.yf import read_all_news
+
 # from warrenbotfett.api.yf import get_instrument_history
 from warrenbotfett.common import BotSummary
 from warrenbotfett.db.write import store_summary
-from warrenbotfett.api.yf import read_all_news
 
 search("Google")
 
@@ -27,11 +26,13 @@ from pydantic_ai.models.google import GoogleModelSettings
 
 settings = GoogleModelSettings(google_thinking_config={"include_thoughts": True})
 
-from warrenbotfett.common import supported_instruments, WarrentBOTfettInstrument
+from warrenbotfett.common import WarrentBOTfettInstrument, supported_instruments
+
 
 def list_supported_instruments() -> list[WarrentBOTfettInstrument]:
-    """This function returns the list of all supported investment vehicles. Every vehicle(instrument) has a ticker for Trading212 tools and one for yfinance tools. """
+    """This function returns the list of all supported investment vehicles. Every vehicle(instrument) has a ticker for Trading212 tools and one for yfinance tools."""
     return supported_instruments
+
 
 analyst_agent = Agent(
     # model="openai:o3",
@@ -70,7 +71,7 @@ run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
     "You have all the tools avaialble, so you can trade. Allways read all news, you have a tools for that.  Be desicive. Summarize what you did at the end."
     "You don't have to make a trade if you think that is the best desicion.",
     message_history=message_history,
-    parallel=False
+    parallel=False,
 )
 
 for message in run_result.all_messages():

@@ -11,9 +11,11 @@ import asyncio
 import streamlit as st
 
 from warrenbotfett.api.yf import data_collection_agent
-from warrenbotfett.common import (NewsInterpretation,
-                                  NewsInterpretationSentiment,
-                                  supported_instruments)
+from warrenbotfett.common import (
+    NewsInterpretation,
+    NewsInterpretationSentiment,
+    supported_instruments,
+)
 
 
 async def run_all() -> list[NewsInterpretation]:

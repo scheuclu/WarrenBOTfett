@@ -5,10 +5,9 @@ import logfire
 import requests
 from dotenv import load_dotenv
 
-from warrenbotfett.common import ToolError
+from warrenbotfett.common import ToolError, Trading212Ticker
 from warrenbotfett.models import Position
 from warrenbotfett.utils.secrets import secrets
-from warrenbotfett.common import Trading212Ticker
 
 load_dotenv()
 

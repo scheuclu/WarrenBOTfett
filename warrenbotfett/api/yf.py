@@ -11,20 +11,28 @@ from warrenbotfett.common import ToolError
 
 load_dotenv()
 from dev import extract_article_text
-from warrenbotfett.common import (NewsInterpretation, NewsPiece,
-                                  RawNewsInformation, YFinanceTicker,
-                                  supported_instruments)
-from warrenbotfett.common import WarrentBOTfettInstrument
+from warrenbotfett.common import (
+    NewsInterpretation,
+    NewsPiece,
+    RawNewsInformation,
+    WarrentBOTfettInstrument,
+    YFinanceTicker,
+    supported_instruments,
+)
+
 logfire.configure()
 logfire.instrument_pydantic_ai()
 
 
 from warrenbotfett.common import YFinanceTicker
-def get_instrument_price(ticker: YFinanceTicker) -> float: #TODO make async
-    tick = yf.Ticker(ticker.value)
-    return tick.info['previousClose']
 
-async def read_yahoo_news_article(url: str) -> str:
+
+def get_instrument_price(ticker: YFinanceTicker) -> float:  # TODO make async
+    tick = yf.Ticker(ticker.value)
+    return tick.info["previousClose"]
+
+
+async def read_yahoo_news_article(url: str) -> NewsInterpretation:
     print(f"Fetching: {url}")
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -86,15 +94,21 @@ data_collection_agent = Agent(
 
 def read_all_news() -> dict[WarrentBOTfettInstrument, NewsInterpretation]:
     """This function reads and interprets the news for every supported Instrument."""
+
     async def run_all():
         result = await asyncio.gather(
-            *[data_collection_agent.run(supported_instrument.model_dump_json()) for supported_instrument in supported_instruments],
+            *[
+                data_collection_agent.run(supported_instrument.model_dump_json())
+                for supported_instrument in supported_instruments
+            ],
         )
         return [i.output for i in result]
 
     result = asyncio.run(run_all())
-    return {instrument:news_interpretation for instrument, news_interpretation in zip(supported_instruments, result)}
-
+    return {
+        instrument: news_interpretation
+        for instrument, news_interpretation in zip(supported_instruments, result)
+    }
 
 
 if __name__ == "__main__":

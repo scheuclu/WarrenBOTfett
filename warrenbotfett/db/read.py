@@ -33,4 +33,3 @@ if __name__ == "__main__":
     # print(f"{summary=}")
     data = read_sp500_benchmark()
     print(data)
-
