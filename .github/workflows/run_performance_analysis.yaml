@@ -31,4 +31,4 @@ jobs:
         run: uv sync --all-extras
 
       - name: Run Python script
-        run: uv run python scripts/write_sp500_performance_analysis.py
+        run: uv run python write_sp500_performance_analysis.py
