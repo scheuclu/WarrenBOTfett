@@ -1,4 +1,4 @@
-name: Keep Streamlit Awake
+name: daily_query_streamlit_app
 
 on:
   schedule:
