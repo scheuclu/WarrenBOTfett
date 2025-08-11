@@ -3,7 +3,7 @@ name: Keep Streamlit Awake
 on:
   schedule:
     # Daily at 06:20 UTC (08:20 Vienna in summer)
-    - cron: "20 6 * * *"
+    - cron: "0 */6 * * *"
   workflow_dispatch: {}
 
 permissions:
