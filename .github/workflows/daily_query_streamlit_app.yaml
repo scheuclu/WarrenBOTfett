@@ -1,0 +1,69 @@
+name: daily_query_streamlit_app
+
+on:
+  schedule:
+    # Daily at 06:20 UTC (08:20 Vienna in summer)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  STREAMLIT_URL: "https://warrenbotfett.streamlit.app"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Warm Streamlit (with cookies & limited redirects)
+        run: |
+          set -euo pipefail
+
+          URLS=(
+            "${STREAMLIT_URL}/"
+            "${STREAMLIT_URL}/?embed=true"
+            "${STREAMLIT_URL}/_stcore/health"
+          )
+
+          ua="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+          jar="$(mktemp)"
+
+          success=0
+          for u in "${URLS[@]}"; do
+            echo "Pinging: $u"
+            code=$(
+              curl -4 --silent --show-error \
+                --fail-with-body \
+                --location \
+                --max-redirs 10 \
+                --connect-timeout 20 \
+                --max-time 120 \
+                --cookie-jar "$jar" --cookie "$jar" \
+                --header "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+                --header "Accept-Language: en-US,en;q=0.9" \
+                --header "Cache-Control: no-cache" \
+                --header "Pragma: no-cache" \
+                --header "Upgrade-Insecure-Requests: 1" \
+                --compressed \
+                --http1.1 \
+                -A "$ua" \
+                --write-out "%{http_code}" \
+                --output /dev/null \
+                "$u" || true
+            )
+            echo "HTTP $code"
+            if [[ "$code" =~ ^2[0-9][0-9]$ ]]; then
+              success=1
+              break
+            fi
+          done
+
+          rm -f "$jar"
+
+          if [[ "$success" -ne 1 ]]; then
+            echo "All probes failed (redirect loop or non-2xx)."
+            exit 1
+          fi
+
+          echo "Streamlit warmed successfully."

@@ -1,4 +1,4 @@
-name: Daily Performance Analysis
+name: run_performance_analysis
 
 on:
   schedule:
