@@ -1,0 +1,36 @@
+name: daily_query_streamlit_app
+
+on:
+  schedule:
+    # Runs daily at 06:20 UTC (adjust as needed; GitHub Actions uses UTC)
+    - cron: "20 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  # Put your full app URL here or store it as a secret and reference it with: ${{ secrets.STREAMLIT_URL }}
+  STREAMLIT_URL: "https://warrenbotfett.streamlit.app/"
+  USER_AGENT: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit Streamlit app (GET)
+        run: |
+          echo "Pinging: $STREAMLIT_URL"
+          # Use GET (not HEAD) so Streamlit actually renders and warms the app
+          curl \
+            --fail \
+            --show-error \
+            --location \
+            --max-time 90 \
+            --retry 3 \
+            --retry-delay 5 \
+            --header "Cache-Control: no-cache" \
+            --header "Pragma: no-cache" \
+            --header "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+            -A "$USER_AGENT" \
+            "$STREAMLIT_URL"
