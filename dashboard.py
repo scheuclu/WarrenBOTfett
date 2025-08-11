@@ -30,11 +30,13 @@ with st.sidebar:
 # st.divider()
 summaries: dict[datetime.datetime, BotSummary] = read_summary()
 sp500_benchmark = read_sp500_benchmark()
+min_id = min([row['id'] for row in sp500_benchmark])
+row_min_id=[row for row in sp500_benchmark if row['id']==min_id][0]
 
 trace_sp500 = go.Scatter(
     x=[row["created_at"] for row in sp500_benchmark],
     y=[
-        row["sp500_price"] / sp500_benchmark[-1]["sp500_price"]
+        row["sp500_price"] / row_min_id["sp500_price"]
         for row in sp500_benchmark
     ],
     name="SP500 benchmark",
@@ -42,7 +44,7 @@ trace_sp500 = go.Scatter(
 trace_portfolio = go.Scatter(
     x=[row["created_at"] for row in sp500_benchmark],
     y=[
-        row["portfolio_value"] / sp500_benchmark[-1]["portfolio_value"]
+        row["portfolio_value"] / row_min_id["portfolio_value"]
         for row in sp500_benchmark
     ],
     name="WarrenBOTfett portfolio",
