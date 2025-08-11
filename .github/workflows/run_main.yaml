@@ -1,4 +1,4 @@
-name: Daily Python Run
+name: run_main
 
 on:
   schedule:
