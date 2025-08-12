@@ -24,7 +24,8 @@ from warrenbotfett.common import YFinanceTicker
 
 def get_instrument_price(ticker: YFinanceTicker) -> float:  # TODO make async
     tick = yf.Ticker(ticker.value)
-    return tick.info["bid"] if 'bid' in tick.info else tick.info["previousClose"]
+    return tick.info["previousClose"]
+    #return tick.info["bid"] if 'bid' in tick.info else tick.info["previousClose"]
 
 
 async def read_yahoo_news_article(url: str) -> NewsInterpretation:
