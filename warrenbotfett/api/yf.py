@@ -24,7 +24,7 @@ from warrenbotfett.common import YFinanceTicker
 
 def get_instrument_price(ticker: YFinanceTicker) -> float:  # TODO make async
     tick = yf.Ticker(ticker.value)
-    return tick.info["previousClose"]
+    return tick.info["bid"] if 'bid' in tick.info else tick.info["previousClose"]
 
 
 async def read_yahoo_news_article(url: str) -> NewsInterpretation:
@@ -130,3 +130,22 @@ if __name__ == "__main__":
     #     print(r)
     # print(time.time() - start)
     # print("Done")
+"""
+dict_keys(['longBusinessSummary', 'companyOfficers', 'executiveTeam', 'maxAge', 'priceHint',
+'previousClose', 'open', 'dayLow', 'dayHigh', 'regularMarketPreviousClose', 'regularMarketOpen',
+'regularMarketDayLow', 'regularMarketDayHigh', 'trailingPE', 'volume', 'regularMarketVolume',
+'averageVolume', 'averageVolume10days', 'averageDailyVolume10Day', 'bid', 'ask', 'bidSize',
+'askSize', 'yield', 'totalAssets', 'fiftyTwoWeekLow', 'fiftyTwoWeekHigh', 'fiftyDayAverage',
+'twoHundredDayAverage', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield', 'navPrice',
+'currency', 'tradeable', 'category', 'ytdReturn', 'beta3Year', 'fundFamily', 'fundInceptionDate',
+'legalType', 'threeYearAverageReturn', 'fiveYearAverageReturn', 'quoteType', 'symbol', 'language',
+'region', 'typeDisp', 'quoteSourceName', 'triggerable', 'customPriceAlertConfidence', 'longName',
+'marketState', 'esgPopulated', 'exchange', 'messageBoardId', 'exchangeTimezoneName', 'exchangeTimezoneShortName',
+'gmtOffSetMilliseconds', 'market', 'shortName', 'corporateActions', 'regularMarketChangePercent', 'regularMarketPrice',
+'regularMarketTime', 'sharesOutstanding', 'bookValue', 'fiftyDayAverageChange', 'fiftyDayAverageChangePercent',
+'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent', 'netExpenseRatio', 'marketCap', 'priceToBook',
+'sourceInterval', 'exchangeDataDelayedBy', 'cryptoTradeable', 'hasPrePostMarketData', 'firstTradeDateMilliseconds',
+'regularMarketChange', 'regularMarketDayRange', 'fullExchangeName', 'financialCurrency', 'averageDailyVolume3Month',
+'fiftyTwoWeekLowChange', 'fiftyTwoWeekLowChangePercent', 'fiftyTwoWeekRange', 'fiftyTwoWeekHighChange', 'fiftyTwoWeekHighChangePercent', 'fiftyTwoWeekChangePercent', 'dividendYield', 'trailingThreeMonthReturns', 'trailingThreeMonthNavReturns', 'netAssets', 'epsTrailingTwelveMonths', 'trailingPegRatio'])
+
+"""
