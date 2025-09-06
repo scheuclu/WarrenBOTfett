@@ -8,4 +8,6 @@ Track the agents actions and performance [here](https://warrenbotfett.streamlit.
 
 The agent currently does paper trading on [Trading212](https://www.trading212.com/invite/17teXFVIhh).
 
+You can see the agents news interpretation [here](https://warrenbotfett-stock-news.streamlit.app).
+
 <img src="WarrenBOTfet.jpeg" alt="WarrenBOTfet" width="50%"/>
