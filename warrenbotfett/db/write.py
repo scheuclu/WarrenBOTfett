@@ -1,7 +1,8 @@
 from pydantic_ai.agent import AgentRunResult
 from supabase import Client, create_client
 
-from warrenbotfett.common import BotSummary, PositionAnalysis, ToolCall
+from warrenbotfett.common import (BotSummary2, BuyOrder, PositionAnalysis,
+                                  SellOrder, Trading212Ticker)
 from warrenbotfett.utils.secrets import secrets
 
 supabase: Client = create_client(secrets.supabase_url, secrets.supabase_key)
@@ -18,7 +19,7 @@ def store_sp500_performance_analysis(
     return response.data is not None and len(response.data) != 0
 
 
-def store_summary(run_result: AgentRunResult[BotSummary]) -> bool:
+def store_summary(run_result: AgentRunResult[BotSummary2]) -> bool:
     response = (
         supabase.table("DailySummaries")
         .insert({"summary": run_result.output.model_dump_json()})
@@ -42,20 +43,27 @@ def store_summary(run_result: AgentRunResult[BotSummary]) -> bool:
 
 
 if __name__ == "__main__":
-    bot_summary = BotSummary(
+    bot_summary = BotSummary2(
         position_summaries=[
             PositionAnalysis(instrument="AAPL", report="asdasdasdasdads")
         ],
         overall_summary="Overall, everything is great",
-        tool_calls=[
-            ToolCall(
-                function_name="aaa", kwargs={"bb": 1}, reasoning="This was the reason"
-            )
+        actions=[
+            SellOrder(
+                instrument=Trading212Ticker.AAPL_US_EQ,
+                amount=100,
+                reasoning="It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued.",
+            ),
+            BuyOrder(
+                instrument=Trading212Ticker.AAPL_US_EQ,
+                amount=100,
+                reasoning="It's undervalued It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued. It's overvalued.",
+            ),
         ],
     )
     from pydantic_ai._agent_graph import GraphAgentState, _usage
 
-    agent_run_result = AgentRunResult[BotSummary](
+    agent_run_result = AgentRunResult[BotSummary2](
         output=bot_summary,
         _output_tool_name="None",
         _state=GraphAgentState(

@@ -1,97 +1,7 @@
 from enum import Enum, StrEnum
-from typing import Literal
+from typing import Literal, Union
 
 from pydantic import BaseModel, ConfigDict, Field
-
-
-class ToolError(BaseModel):
-    """Whenever this is returned, it means something went wront when calling a tool and we are capturing the problem here."""
-
-    error_type: str = Field(description="Type of the error that has occured.")
-    message: str = Field(description="A message describing what exactly the issue is.")
-
-
-class ToolCall(BaseModel):
-    function_name: str = Field(description="Name of the tool that will be called.")
-    kwargs: dict = Field(
-        description="Arguments that the function is being called with."
-    )
-    reasoning: str = Field(
-        description="Reasoning behind the agent making this particular tool call."
-    )
-
-
-class NewsInterpretationSentiment(StrEnum):
-    POSITIVE = (
-        "POSITIVE"  # = Field(description='Enum value for positive news sentiment')
-    )
-    NEUTRAL = "NEUTRAL"  # = Field(description='Enum value for neutral or unknown news sentiment.')
-    NEGATIVE = (
-        "NEGATIVE"  # = Field(description='Enum value for negative news sentiment')
-    )
-
-
-class NewsInterpretation(BaseModel):
-    """This datas structure holds a summary of the news articles analyzed for a particular Stock/instrument."""
-
-    name: str = Field("Ticker of the company or instrument that has been analyzed.")
-    num_articles: int = Field(
-        description="The number of news articles that have been sucessfully processed for this Interpretation.",
-        ge=0,
-    )
-    sentiment: NewsInterpretationSentiment = Field(
-        description="A characterization of how the general sentiment of the news articles is. Options are `POSITIVE`, 'NEGATIVE` and `NEUTRAL`. If in doubt, do `NEUTRAL`."
-    )
-    summary: str = Field(
-        "Summary of the current news. Ideally around 1000 characters. If no news can Be found, put the phrase `No news found` 20 times",
-        min_length=0,
-        max_length=2000,
-    )
-
-
-class NewsPiece(BaseModel):
-    title: str
-    content: str | None = None
-
-
-class RawNewsInformation(BaseModel):
-    ticker: "YFinanceTicker" = Field(description="The ticker that the news is for.")
-    news_pieces: list[NewsPiece]
-
-
-class StockHistoryRequest(BaseModel):
-    ticker: str
-    period: Literal["1d", "5d", "1mo", "3mo", "6mo"]
-
-
-# from warrenbotfett.api.yf import InstrumentInformation
-
-
-#
-class PositionAnalysis(BaseModel):
-    instrument: str = Field(
-        description="Name of the instrument we have an active position in."
-    )
-    # news_interpretation: InstrumentInformation = Field(description="The full instrument history. This was used (among other things) to make agent desicions.`")
-    report: str = Field(
-        description="Daily analysis of this position. This should be based on performance as well as recent news and market data."
-    )
-
-
-class BotSummary(BaseModel):
-    position_summaries: list[PositionAnalysis] = Field(
-        description="Analysis for every position we are active in or consider to be active in."
-    )
-    overall_summary: str = Field(
-        description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."
-    )
-    tool_calls: list[ToolCall] = Field(
-        description="List of tool calls that the agent has made to make a trade. No tool calls that are just reading data."
-    )
-
-
-class Ticker(BaseModel):
-    trading212: str = Field(description="Ticker as used on trading212")
 
 
 class Trading212Ticker(Enum):
@@ -183,6 +93,135 @@ class YFinanceTicker(Enum):
     SPY = "SPY"
     APC = "APC"
     JNJ = "JNJ"
+
+
+class ToolError(BaseModel):
+    """Whenever this is returned, it means something went wront when calling a tool and we are capturing the problem here."""
+
+    error_type: str = Field(description="Type of the error that has occured.")
+    message: str = Field(description="A message describing what exactly the issue is.")
+
+
+class ToolCall(BaseModel):
+    function_name: str = Field(description="Name of the tool that will be called.")
+    kwargs: dict = Field(
+        description="Arguments that the function is being called with."
+    )
+    reasoning: str = Field(
+        description="Reasoning behind the agent making this particular tool call."
+    )
+
+
+class NewsInterpretationSentiment(StrEnum):
+    POSITIVE = (
+        "POSITIVE"  # = Field(description='Enum value for positive news sentiment')
+    )
+    NEUTRAL = "NEUTRAL"  # = Field(description='Enum value for neutral or unknown news sentiment.')
+    NEGATIVE = (
+        "NEGATIVE"  # = Field(description='Enum value for negative news sentiment')
+    )
+
+
+class NewsInterpretation(BaseModel):
+    """This datas structure holds a summary of the news articles analyzed for a particular Stock/instrument."""
+
+    name: str = Field("Ticker of the company or instrument that has been analyzed.")
+    num_articles: int = Field(
+        description="The number of news articles that have been sucessfully processed for this Interpretation.",
+        ge=0,
+    )
+    sentiment: NewsInterpretationSentiment = Field(
+        description="A characterization of how the general sentiment of the news articles is. Options are `POSITIVE`, 'NEGATIVE` and `NEUTRAL`. If in doubt, do `NEUTRAL`."
+    )
+    summary: str = Field(
+        "Summary of the current news. Ideally around 1000 characters. If no news can Be found, put the phrase `No news found` 20 times",
+        min_length=0,
+        max_length=2000,
+    )
+
+
+class NewsPiece(BaseModel):
+    title: str
+    content: str | None = None
+
+
+class RawNewsInformation(BaseModel):
+    ticker: "YFinanceTicker" = Field(description="The ticker that the news is for.")
+    news_pieces: list[NewsPiece]
+
+
+class StockHistoryRequest(BaseModel):
+    ticker: str
+    period: Literal["1d", "5d", "1mo", "3mo", "6mo"]
+
+
+# from warrenbotfett.api.yf import InstrumentInformation
+
+
+#
+class PositionAnalysis(BaseModel):
+    instrument: str = Field(
+        description="Name of the instrument we have an active position in."
+    )
+    # news_interpretation: InstrumentInformation = Field(description="The full instrument history. This was used (among other things) to make agent desicions.`")
+    report: str = Field(
+        description="Daily analysis of this position. This should be based on performance as well as recent news and market data."
+    )
+
+
+class BotSummary(BaseModel):
+    position_summaries: list[PositionAnalysis] = Field(
+        description="Analysis for every position we are active in or consider to be active in."
+    )
+    overall_summary: str = Field(
+        description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."
+    )
+    tool_calls: list[ToolCall] = Field(
+        description="List of tool calls that the agent has made to make a trade. No tool calls that are just reading data."
+    )
+
+
+class BuyOrder(BaseModel):
+    "Model representing an intention to buy a specific asset as a market order."
+
+    instrument: Trading212Ticker = Field(description="The instrument we want to buy.")
+    amount: float = Field(description="Amount we want to invest (in EUR)")
+    reasoning: str = Field(
+        description="The reasoning as to why to buy this asset.",
+        min_length=100,
+        max_length=400,
+    )
+
+
+class SellOrder(BaseModel):
+    "Model representing an intention to buy a specific asset as a market order."
+
+    instrument: Trading212Ticker = Field(description="The instrument we want to sell.")
+    amount: float = Field(description="Amount we want to invest (in EUR)")
+    reasoning: str = Field(
+        description="The reasoning as to why to sell this asset.",
+        min_length=100,
+        max_length=400,
+    )
+
+
+Action = Union[BuyOrder, SellOrder]
+
+
+class BotSummary2(BaseModel):
+    position_summaries: list[PositionAnalysis] = Field(
+        description="Analysis for every position we are active in or consider to be active in."
+    )
+    overall_summary: str = Field(
+        description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."
+    )
+    actions: list[Action] = Field(
+        description="A list of orders the agent decides to make. Note that Sell orders will be executed first and the proceedings can be used for Buy orders directly."
+    )
+
+
+class Ticker(BaseModel):
+    trading212: str = Field(description="Ticker as used on trading212")
 
 
 class WarrentBOTfettInstrument(BaseModel):

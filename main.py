@@ -9,7 +9,7 @@ from warrenbotfett.api.portfolio import (get_all_positions,
                                          get_specific_position)
 from warrenbotfett.api.yf import read_all_news
 # from warrenbotfett.api.yf import get_instrument_history
-from warrenbotfett.common import BotSummary
+from warrenbotfett.common import BotSummary2
 from warrenbotfett.db.write import store_summary
 
 search("Google")
@@ -62,12 +62,12 @@ analyst_agent = Agent(
     ],
     end_strategy="exhaustive",  #'early'
     instrument=True,
-    output_type=BotSummary,
+    output_type=BotSummary2,
 )
 
 
 message_history = []
-run_result: AgentRunResult[BotSummary] = analyst_agent.run_sync(
+run_result: AgentRunResult[BotSummary2] = analyst_agent.run_sync(
     user_prompt="Analyze the market and the current holdings and then make a descion whether to change anyhting. You have all the tools avaialble, so you can trade. Allways read all news, you have a tools for that.  Be desicive. Summarize what you did at the end. You don't have to make a trade if you think that is the best desicion.",
     message_history=message_history,
 )
@@ -77,6 +77,9 @@ for message in run_result.all_messages():
     for part in message.parts:
         print(" ", part)
 
+
+# Execute Actions
+# run_result.output.actions
 
 success = store_summary(run_result=run_result)
 print(f"{success=}")
