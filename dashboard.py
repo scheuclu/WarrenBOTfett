@@ -3,7 +3,7 @@ import datetime
 import plotly.graph_objects as go
 import streamlit as st
 
-from warrenbotfett.common import BotSummary, ToolCall
+from warrenbotfett.common import BotSummary2
 from warrenbotfett.db.read import read_sp500_benchmark, read_summary
 
 st.set_page_config(layout="wide")
@@ -28,7 +28,7 @@ with st.sidebar:
 # st.markdown("---")
 
 # st.divider()
-summaries: dict[datetime.datetime, BotSummary] = read_summary()
+summaries: dict[datetime.datetime, BotSummary2] = read_summary()
 sp500_benchmark = read_sp500_benchmark()
 min_id = min([row["id"] for row in sp500_benchmark])
 row_min_id = [row for row in sp500_benchmark if row["id"] == min_id][0]
@@ -80,9 +80,10 @@ for i, (date, s) in enumerate(reversed(summaries.items())):
 
         st.markdown("## Actions")
 
-        tool_calls: list[ToolCall] = s.tool_calls
+        # actions: list[ToolCall] = s.actions
 
-        reasoning_string = "\n".join(
-            [" - " + tool_call.reasoning for tool_call in tool_calls]
-        )
-        st.markdown(reasoning_string)
+        # TODO(scheuclu) Re-enable
+        # reasoning_string = "\n".join(
+        #     [" - " + tool_call.reasoning for tool_call in tool_calls]
+        # )
+        # st.markdown(reasoning_string)

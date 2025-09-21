@@ -169,23 +169,11 @@ class PositionAnalysis(BaseModel):
     )
 
 
-class BotSummary(BaseModel):
-    position_summaries: list[PositionAnalysis] = Field(
-        description="Analysis for every position we are active in or consider to be active in."
-    )
-    overall_summary: str = Field(
-        description="An overall summary. This should include other investments that have been considered. Even if they have not been made. We want the reasoning."
-    )
-    tool_calls: list[ToolCall] = Field(
-        description="List of tool calls that the agent has made to make a trade. No tool calls that are just reading data."
-    )
-
-
 class BuyOrder(BaseModel):
-    "Model representing an intention to buy a specific asset as a market order."
+    "Model representing an intention to buy a specific asset as a market order. This will increase asset holdings."
 
     instrument: Trading212Ticker = Field(description="The instrument we want to buy.")
-    amount: float = Field(description="Amount we want to invest (in EUR)")
+    amount: float = Field(description="Amount we want to invest (in EUR)", ge=0)
     reasoning: str = Field(
         description="The reasoning as to why to buy this asset.",
         min_length=100,
@@ -194,10 +182,10 @@ class BuyOrder(BaseModel):
 
 
 class SellOrder(BaseModel):
-    "Model representing an intention to buy a specific asset as a market order."
+    "Model representing an intention to sell a specific asset as a market order. This will get rid of asset holdings."
 
     instrument: Trading212Ticker = Field(description="The instrument we want to sell.")
-    amount: float = Field(description="Amount we want to invest (in EUR)")
+    amount: float = Field(description="Amount we want to invest (in EUR)", ge=0)
     reasoning: str = Field(
         description="The reasoning as to why to sell this asset.",
         min_length=100,
