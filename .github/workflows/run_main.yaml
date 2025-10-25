@@ -1,9 +1,9 @@
 name: run_main
 
-on:
-  schedule:
-    - cron: '0 9 * * 1-5'  # Every weekday (Mon-Fri) at 09:00 UTC
-  workflow_dispatch:       # Allow manual triggering
+# on:
+#   schedule:
+#     - cron: '0 9 * * 1-5'  # Every weekday (Mon-Fri) at 09:00 UTC
+#   workflow_dispatch:       # Allow manual triggering
 
 env:
   TRADING212_KEY: ${{ secrets.TRADING212_KEY }}
