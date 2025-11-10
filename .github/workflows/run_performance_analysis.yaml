@@ -1,9 +1,9 @@
 name: run_performance_analysis
 
-on:
-  schedule:
-    - cron: '0 8 * * *'  # Every weekday (Mon-Fri) at 09:00 UTC
-  workflow_dispatch:       # Allow manual triggering
+# on:
+#   schedule:
+#     - cron: '0 8 * * *'  # Every weekday (Mon-Fri) at 09:00 UTC
+#   workflow_dispatch:       # Allow manual triggering
 
 env:
   TRADING212_KEY: ${{ secrets.TRADING212_KEY }}
