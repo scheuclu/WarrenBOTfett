@@ -48,7 +48,7 @@ class Trading212Ticker(Enum):
     FIVE_SPYl_EQ = "5SPYl_EQ"
     APCd_EQ = "APCd_EQ"
     JNJ_US_EQ = "JNJ_US_EQ"
-    SP500_ACC = "VUAG"
+    # SP500_ACC = "VUAG"
 
 
 class YFinanceTicker(Enum):
